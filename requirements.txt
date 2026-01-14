@@ -1,0 +1,29 @@
+# QoE Tool - Production Dependencies
+# Generated for free deployment (Streamlit Cloud, Railway, Render, etc.)
+
+# Core Framework
+streamlit>=1.28.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Excel Processing
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
+
+# API & Validation
+pydantic>=2.0.0
+python-multipart>=0.0.6
+
+# Configuration
+pyyaml>=6.0.0
+
+# Optional: For development (not needed for deployment)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# black>=23.0.0
+# ruff>=0.1.0
+

@@ -1,0 +1,50 @@
+{
+  "rules": [
+    {
+      "rule_name": "One-Time Legal Expenses",
+      "enabled": true,
+      "match_type": "keyword",
+      "match_value": "legal settlement",
+      "adjustment_category": "One-Time Expenses",
+      "add_back": true,
+      "reasoning_template": "One-time legal settlement expense: {description} (${amount})"
+    },
+    {
+      "rule_name": "Non-Recurring Revenue",
+      "enabled": true,
+      "match_type": "keyword",
+      "match_value": "one-time",
+      "adjustment_category": "Non-Recurring Revenue",
+      "add_back": false,
+      "reasoning_template": "Non-recurring revenue item: {account} - {description}"
+    },
+    {
+      "rule_name": "Depreciation Adjustment",
+      "enabled": true,
+      "match_type": "account",
+      "match_value": "Depreciation Expense",
+      "adjustment_category": "D&A",
+      "add_back": true,
+      "reasoning_template": "Depreciation expense add-back: {account}"
+    },
+    {
+      "rule_name": "Restructuring Charges",
+      "enabled": true,
+      "match_type": "regex",
+      "match_value": "(?i)(restructur|severance|layoff)",
+      "adjustment_category": "Restructuring",
+      "add_back": true,
+      "reasoning_template": "Restructuring charge: {description}"
+    },
+    {
+      "rule_name": "Large One-Time Items",
+      "enabled": false,
+      "match_type": "threshold",
+      "match_value": 100000,
+      "adjustment_category": "Large One-Time Items",
+      "add_back": true,
+      "reasoning_template": "Large one-time item exceeding $100k: {account} - ${amount}"
+    }
+  ]
+}
+

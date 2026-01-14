@@ -1,0 +1,18 @@
+version: 1.0
+build:
+  commands:
+    build:
+      - echo "Building QoE Tool"
+      - pip install -r requirements.txt
+run:
+  runtime-version: 3.11
+  command: streamlit run app/ui/app.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true
+  network:
+    port: 8501
+    env: PORT
+  env:
+    - name: STREAMLIT_SERVER_HEADLESS
+      value: "true"
+    - name: STREAMLIT_SERVER_PORT
+      value: "8501"
+
