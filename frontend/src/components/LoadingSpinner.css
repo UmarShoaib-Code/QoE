@@ -1,0 +1,40 @@
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--gray-600);
+}
+
+.loading-spinner .spinning {
+  animation: spin 1s linear infinite;
+  color: var(--secondary-blue);
+}
+
+.loading-spinner-sm {
+  min-height: 100px;
+}
+
+.loading-spinner-md {
+  min-height: 200px;
+}
+
+.loading-spinner-lg {
+  min-height: 400px;
+}
+
+.loading-spinner span {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+

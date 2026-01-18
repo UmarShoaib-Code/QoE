@@ -1,0 +1,215 @@
+Metadata-Version: 2.4
+Name: qoe-tool
+Version: 1.0.0
+Summary: Internal Quality of Experience Tool
+Author: QoE Team
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=2.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: openpyxl>=3.1.0
+Requires-Dist: xlsxwriter>=3.1.0
+Requires-Dist: fastapi>=0.104.0
+Requires-Dist: uvicorn[standard]>=0.24.0
+Requires-Dist: streamlit>=1.28.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: pyyaml>=6.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.11.0; extra == "dev"
+
+# QoE Tool
+
+Internal Quality of Earnings (QoE) Tool for data ingestion, normalization, validation, mapping, metrics calculation, and Excel report generation.
+
+## Project Structure
+
+```
+qoe_tool/
+  app/
+    api/            # FastAPI routes
+    core/           # ingestion/normalization/validation/mapping/metrics
+    excel/          # Excel databook generator + styling
+    ui/             # Streamlit UI
+    utils/          # logging, config, helpers
+  tests/
+  sample_data/
+  pyproject.toml
+  README.md
+```
+
+## Requirements
+
+- Python 3.11 or higher
+
+## Installation
+
+1. Create a virtual environment (recommended):
+```bash
+python -m venv venv
+```
+
+2. Activate the virtual environment:
+   - On Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+   - On Linux/Mac:
+     ```bash
+     source venv/bin/activate
+     ```
+
+3. Install the package:
+```bash
+pip install -e .
+```
+
+Or install dependencies directly:
+```bash
+pip install pandas numpy openpyxl xlsxwriter fastapi uvicorn streamlit pydantic python-multipart
+```
+
+## Running the Application
+
+### FastAPI Server
+
+Start the FastAPI server:
+
+```bash
+uvicorn app.api.main:app --reload
+```
+
+The API will be available at:
+- API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+- Alternative docs: http://localhost:8000/redoc
+
+### Streamlit UI
+
+Start the Streamlit application:
+
+```bash
+streamlit run app/ui/app.py
+```
+
+The UI will be available at: http://localhost:8501
+
+## Development
+
+### Running Tests
+
+Run all tests:
+```bash
+pytest tests/
+```
+
+Run with coverage:
+```bash
+pytest tests/ --cov=app --cov-report=html
+```
+
+Run specific test file:
+```bash
+pytest tests/test_integration.py -v
+```
+
+### Code Formatting
+
+```bash
+black app/
+```
+
+### Linting
+
+```bash
+ruff check app/
+```
+
+## Dependencies
+
+- **pandas**: Data manipulation and analysis
+- **numpy**: Numerical computing
+- **openpyxl**: Excel file reading/writing
+- **xlsxwriter**: Excel file writing with advanced formatting
+- **fastapi**: Modern web framework for building APIs
+- **uvicorn**: ASGI server for FastAPI
+- **streamlit**: Web app framework for data applications
+- **pydantic**: Data validation using Python type annotations
+- **python-multipart**: Required for FastAPI file uploads
+
+## Glossary
+
+### General Ledger (GL)
+A complete record of all financial transactions for a company, organized by account. The General Ledger contains detailed transaction data including dates, accounts, descriptions, debits, and credits. This tool processes GL exports from accounting systems like QuickBooks Desktop and QuickBooks Online.
+
+### EBITDA
+**Earnings Before Interest, Taxes, Depreciation, and Amortization**. A measure of a company's operating performance calculated as: Revenue - Operating Expenses (excluding interest, taxes, depreciation, and amortization). EBITDA is commonly used to assess a company's profitability and cash-generating ability from operations.
+
+### Adjusted EBITDA
+EBITDA with additional adjustments to normalize or exclude non-recurring, one-time, or non-operational items. Common adjustments include:
+- One-time expenses (legal settlements, restructuring costs)
+- Non-recurring revenue
+- Owner compensation normalization
+- Discretionary expenses
+- Other normalizing adjustments
+
+Adjusted EBITDA provides a clearer picture of a company's sustainable operating performance.
+
+### QoE (Quality of Earnings)
+**Quality of Earnings** analysis evaluates the sustainability, predictability, and reliability of a company's earnings. It involves:
+- Identifying non-recurring or one-time items
+- Normalizing owner compensation and discretionary expenses
+- Adjusting for accounting anomalies
+- Assessing the sustainability of revenue streams
+
+QoE analysis is critical for M&A transactions, valuations, and financial due diligence to understand the true underlying performance of a business.
+
+## QA Checklist
+
+Before deploying or releasing, verify the following:
+
+### ✅ Validation & Workflow
+- [ ] **Validations run before Excel output**: Validation checks execute automatically after normalization and before Excel generation
+- [ ] **Debit/Credit check fails on mismatch**: When debits ≠ credits (beyond tolerance), validation fails and Excel generation is blocked
+- [ ] **Workflow stops on validation failure**: No Excel file is generated when validation status is FAIL
+
+### ✅ Data Processing
+- [ ] **QBD header/subaccount flattening works**: QuickBooks Desktop exports with parent/subaccount headers are correctly flattened (e.g., "Parent : Sub : Account")
+- [ ] **Account name forward-fill**: Parent account headers are forward-filled to transaction rows
+- [ ] **Multi-entity consolidation**: Multiple GL files can be processed and consolidated with entity column
+
+### ✅ Excel Output Quality
+- [ ] **Excel styling is blue/white**: Headers use blue background (#4472C4), white text, light blue table banding (#D9E1F2)
+- [ ] **Excel Tables present**: GL_Clean, Mapping, Pivots_Inputs tabs use Excel Table format
+- [ ] **Filters enabled**: All table tabs have filters enabled on headers
+- [ ] **Freeze panes**: Top row is frozen on all tabs
+- [ ] **Output file opens without warnings**: Generated Excel file opens in Excel without errors or warnings
+- [ ] **Formulas recalculate correctly**: EBITDA tab formulas recalculate properly when data changes
+- [ ] **All tabs present**: README, Validation, GL_Clean, Mapping, EBITDA, Pivots_Inputs (and Adjustments/Adjustment_Log if applicable)
+
+### ✅ Logging & Observability
+- [ ] **Logging present for ingestion**: Log entries for file reading and parsing
+- [ ] **Logging present for normalization**: Log entries for account flattening and data cleaning
+- [ ] **Logging present for validation**: Log entries for validation checks and results
+- [ ] **Logging present for Excel generation**: Log entries for databook creation
+- [ ] **Processing report available**: ProcessingReport object contains row counts and warnings
+
+### ✅ Testing
+- [ ] **All unit tests pass**: `pytest tests/` runs successfully
+- [ ] **Integration tests pass**: End-to-end workflow tests pass
+- [ ] **Sample data tests pass**: Tests with sample QBD/QBO files pass
+
+## License
+
+MIT
+

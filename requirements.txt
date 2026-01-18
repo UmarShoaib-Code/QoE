@@ -21,6 +21,14 @@ python-multipart>=0.0.6
 # Configuration
 pyyaml>=6.0.0
 
+# Database
+sqlalchemy>=2.0.0
+pymysql>=1.1.0
+cryptography>=41.0.0
+
+# Authentication
+bcrypt>=4.0.0
+
 # Optional: For development (not needed for deployment)
 # pytest>=7.4.0
 # pytest-cov>=4.1.0
