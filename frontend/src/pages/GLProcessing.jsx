@@ -137,11 +137,12 @@ const GLProcessing = () => {
     setDownloading(true)
     
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
       const url = excelFileUrl.startsWith('http') 
         ? excelFileUrl 
         : excelFileUrl.startsWith('/api') 
-          ? `http://localhost:8000${excelFileUrl.replace('/api', '')}`
-          : `http://localhost:8000${excelFileUrl}`
+          ? `${apiBaseUrl}${excelFileUrl.replace('/api', '')}`
+          : `${apiBaseUrl}${excelFileUrl}`
       
       const response = await fetch(url, {
         headers: {
